@@ -8,7 +8,7 @@ import{Routes, Route} from 'react-router-dom'
 import Cart from './pages/Cart'
 import Login from './components/Login'
 import Signup from './components/Signup'
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged,setPersistence,browserSessionPersistence } from 'firebase/auth'
 import { auth } from './firebase/firebase'
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify'
@@ -30,6 +30,8 @@ useEffect(()=>{
   sessionStorage.setItem('cart', JSON.stringify(cart))
   }
 },[cart])
+
+setPersistence(auth,browserSessionPersistence)
 
 useEffect(()=>{
   const unsubscribe = onAuthStateChanged(auth,(currentuser)=>{
