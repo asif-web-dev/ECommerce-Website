@@ -27,7 +27,7 @@ const cart = useSelector((state) => state.cart)
 
 useEffect(()=>{
   if(typeof window !=='undefined'){
-  localStorage.setItem('cart', JSON.stringify(cart))
+  sessionStorage.setItem('cart', JSON.stringify(cart))
   }
 },[cart])
 

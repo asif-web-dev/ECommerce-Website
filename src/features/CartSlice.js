@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 
-const savedCart = localStorage.getItem('cart')
+const savedCart = sessionStorage.getItem('cart')
 
 const cartSlice = createSlice({
     name: 'cart',
