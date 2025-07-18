@@ -6,6 +6,8 @@ import { auth } from '../firebase/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { FiLogOut } from 'react-icons/fi';
+import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 
 const Navbar = ({searchTerm,setSearchTerm}) => {
   const cartItems = useSelector((state) => state.cart);
@@ -66,18 +68,22 @@ useEffect(()=>{
         {/* Auth + Cart */}
         <div className="flex items-center gap-4">
           {user ? (<button
-    onClick={handlelogout}
-    className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600"
-  >
-    Logout
-  </button>) : (
-    <div className='space-x-4'>
-           <button className="text-sm text-gray-600 hover:text-blue-600"
+  onClick={handlelogout}
+  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 shadow-sm"
+>
+  <FiLogOut /> Logout
+</button>) : (
+    <div className='flex gap-4'>
+           <button    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 shadow-sm"
             onClick={() => navigate('/login')}
-          >Login</button>
-          <button className="text-sm text-gray-600 hover:text-blue-600"
+          >
+             <FiLogIn />
+            Login</button>
+          <button     className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300 shadow-sm"
             onClick={() => navigate('/signup')}
-          >Signup</button>
+          >
+            <FiUserPlus />
+            Signup</button>
     </div>
   )}
      

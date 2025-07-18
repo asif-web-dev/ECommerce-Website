@@ -13,7 +13,7 @@ import { auth } from './firebase/firebase'
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-
+import Footer from './components/Footer'
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -83,6 +83,7 @@ if(error) return  <p className="text-center mt-10 text-red-500">Error: {error}</
 if (!authChecked) return <p className="text-center mt-10">Checking authentication...</p>;
 return (
   <>
+  <div className="flex flex-col min-h-screen bg-white">
   <ToastContainer
   position="top-right"
   autoClose={3000}
@@ -101,45 +102,58 @@ return (
       <div className="min-h-screen bg-white text-black">
     <div className="max-w-7xl mx-auto p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {products.map(product => {
-            const qty = quantities[product.id] || 1;
-          return(
-          <div key={product.id} className="border rounded p-4 shadow bg-gray-100">
-            <img
-              src={product.image}
-              alt={product.title}
-              className="h-40 w-full object-contain mb-4"
-            />
-            <h2 className="text-base font-semibold mb-2">{product.title}</h2>
-            <div>
-            <p className="text-green-600 font-bold">${product.price}</p>
-            <label htmlFor="quantity"> quantity  </label>
-          <input type="number"
-         
-          placeholder='enter quantity'
-          value={qty}
-          onChange={(e)=>{
-            setQuantities({...quantities,[product.id]:Number(e.target.value)})
-             className="border rounded px-2 py-1 w-16"
-          }}
+     {filteredproducts.length > 0 ? (
+  filteredproducts.map(product => {
+    const qty = quantities[product.id] || 1;
+    return (
+      <div key={product.id} className="border rounded p-4 shadow bg-gray-100">
+        <img
+          src={product.images?.[0] || "https://via.placeholder.com/150"}
+          alt={product.title}
+          className="h-40 w-full object-contain mb-4"
+        />
+        <h2 className="text-base font-semibold mb-2">{product.title}</h2>
+        <div>
+          <p className="text-green-600 font-bold">${product.price}</p>
+          <label htmlFor="quantity"> quantity </label>
+          <input
+            type="number"
+            placeholder="enter quantity"
+            value={qty}
+            onChange={(e) => {
+              setQuantities({
+                ...quantities,
+                [product.id]: Number(e.target.value),
+              });
+            }}
+            className="border rounded px-2 py-1 w-16"
           />
-         </div> 
-  <button onClick={()=>handleAddToCart(product)}
-  disabled={qty <1 || qty >5}
-  className={`mt-2 px-4 py-2 rounded transition ${
-   qty >= 1 && qty <= 5
-      ? "bg-blue-600 text-white hover:bg-blue-700"
-      : "bg-gray-400 text-white cursor-not-allowed"
-  }`}>  Add to Cart
-</button>
-          </div>
-          )
-    })}
+        </div>
+        <button
+          onClick={() => handleAddToCart(product)}
+          disabled={qty < 1 || qty > 5}
+          className={`mt-2 px-4 py-2 rounded transition ${
+            qty >= 1 && qty <= 5
+              ? "bg-blue-600 text-white hover:bg-blue-700"
+              : "bg-gray-400 text-white cursor-not-allowed"
+          }`}
+        >
+          Add to Cart
+        </button>
+      </div>
+    );
+  })
+) : (
+  <p className="col-span-full text-center text-gray-500 text-lg mt-10">
+    ❌ No products match your search.
+  </p>
+)}
+
       </div>
     </div>
   </div>
 ) :(
- <div className="flex items-center justify-center min-h-[70vh] bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
+ <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
   <div className="text-center space-y-4 px-4">
     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
       Welcome to <span className="text-blue-500">ShopMate</span>
@@ -152,7 +166,7 @@ return (
       onClick={() => navigate('/login')}
       className="mt-4 m-6 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition text-white font-semibold shadow-md"
     >
-      Login Now
+      Login
     </button>
     <button onClick={()=> navigate('/signup')}
           className="mt-4 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition text-white font-semibold shadow-md"
@@ -170,12 +184,10 @@ return (
     <Route path='/login' element={<Login/>}/>
     <Route  path='/signup' element={<Signup/>}/>
   </Routes>
+  <Footer />
+  </div>
   </>
 );
-
-
-
-
 
 }
 

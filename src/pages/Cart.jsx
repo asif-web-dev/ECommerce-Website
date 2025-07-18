@@ -14,7 +14,7 @@ function Cart() {
   }
 
  return(
-  <div>
+  <div className="flex flex-col min-h-screen bg-white">
   {
     Array.isArray(cartData) && cartData.length ===0 ? (
        <p className="text-center mt-10 text-gray-500">Your cart is empty.</p>
@@ -26,7 +26,7 @@ function Cart() {
      {cartData && cartData.map((item)=>(
             <div key={item.id} className="border rounded p-4 shadow bg-gray-100">
             <img
-              src={item.image}
+                      src={item.images?.[0] || "https://via.placeholder.com/150"}
               alt={item.title}
               className="h-40 w-full object-contain mb-4"
             />
