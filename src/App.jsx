@@ -12,6 +12,8 @@ import { onAuthStateChanged,setPersistence,browserSessionPersistence } from 'fir
 import { auth } from './firebase/firebase'
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -20,7 +22,8 @@ function App() {
   const [quantities, setQuantities] = useState({})
   const [user, setUser] = useState(null)
 const [authChecked, setAuthChecked] = useState(false);
-
+const [searchTerm, setSearchTerm] = useState('');
+const navigate = useNavigate()
   const dispatch = useDispatch()
 
 const cart = useSelector((state) => state.cart)
@@ -37,7 +40,7 @@ useEffect(()=>{
   const unsubscribe = onAuthStateChanged(auth,(currentuser)=>{
 setUser(currentuser)
 setAuthChecked(true)
-  console.log("Firebase Auth User:", currentuser);
+ 
   });
   return ()=> unsubscribe();
 })
@@ -69,7 +72,11 @@ useEffect(()=>{
   }
 },[user])
   
-
+const filteredproducts = products.filter(product =>
+          product.title.toLowerCase().includes(searchTerm.toLocaleLowerCase())||
+  product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  product.category.toLowerCase().includes(searchTerm.toLowerCase())
+        )
 
 if(loading) return <p className="text-center mt-10">Loading...</p>;
 if(error) return  <p className="text-center mt-10 text-red-500">Error: {error}</p>;
@@ -87,7 +94,7 @@ return (
   pauseOnHover
   theme="light"
   />
-  <Navbar/>
+  <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
   <Routes>
     <Route path='/' element={
      user ?  (
@@ -132,8 +139,30 @@ return (
     </div>
   </div>
 ) :(
-  <div className="flex justify-center items-center h-screen text-center text-xl text-red-500">
-      Please log in to view products.</div>
+ <div className="flex items-center justify-center min-h-[70vh] bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
+  <div className="text-center space-y-4 px-4">
+    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+      Welcome to <span className="text-blue-500">ShopMate</span>
+    </h1>
+    <p className="text-lg sm:text-xl text-gray-300">
+      Please login or Signup to view our latest products and offers.
+    </p>
+   
+    <button
+      onClick={() => navigate('/login')}
+      className="mt-4 m-6 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition text-white font-semibold shadow-md"
+    >
+      Login Now
+    </button>
+    <button onClick={()=> navigate('/signup')}
+          className="mt-4 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition text-white font-semibold shadow-md"
+    >
+      Signup
+    </button>
+
+  </div>
+</div>
+
 )
     }/>
 
@@ -146,16 +175,6 @@ return (
 
 
 
-//   return (
-//   <div className="p-4">
-//     <h1 className="text-2xl font-bold mb-4">Products</h1>
-//     <ul>
-//       {Array.isArray(products) && products.map((product) => (
-//         <li key={product.id} className="text-green-600">{product.image}</li>
-//       ))}
-//     </ul>
-//   </div>
-// );
 
 
 }
