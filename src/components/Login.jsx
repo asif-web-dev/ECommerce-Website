@@ -42,7 +42,7 @@ const Login = ()=>{
     return(
         <div className="flex justify-center items-center h-screen bg-gray-100">
     <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-full max-w-sm space-y-4">
-      <h2 className="text-xl font-bold text-center">login</h2>
+      <h2 className="text-4xl p-2 font-extrabold text-center bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent mb-6">Login</h2>
       <input
         type="email"
         value={email}
@@ -62,11 +62,28 @@ const Login = ()=>{
       <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
         Login
       </button>
+            <div className="mt-4 text-center">
+  <p className="text-gray-600">
+    Don’t have an account?{" "}
+    <button
+      type="button"
+      onClick={() => navigate("/signup")}
+      className="text-blue-600 hover:underline font-medium"
+    >
+      Sign up here
+    </button>
+  </p>
+</div>
     </form>
+ 
     <div>
     {error && <p  className="text-red-500 text-sm text-center">{error}</p>}
   </div>
+  
+
   </div>
+  
+
     )
 }
 

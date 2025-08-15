@@ -11,7 +11,7 @@ import Signup from './components/Signup'
 import { onAuthStateChanged,setPersistence,browserSessionPersistence } from 'firebase/auth'
 import { auth } from './firebase/firebase'
 import 'react-toastify/dist/ReactToastify.css';
-import {ToastContainer} from 'react-toastify'
+import {toast, ToastContainer} from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import Footer from './components/Footer'
 
@@ -46,6 +46,13 @@ setAuthChecked(true)
 })
 
   const handleAddToCart = (product)=>{
+
+if (!user){
+   toast.info("Please log in or sign up to add items to your cart");
+  navigate("/login");
+  return;
+}
+
     const selectedQuantity = quantities[product.id] || 1
     if(selectedQuantity <1 || selectedQuantity>5) return;
     dispatch(AddToCart({...product, quantity: selectedQuantity}))
@@ -64,12 +71,7 @@ useEffect(()=>{
       setLoading(false)
     }
   }
-  if(user){
-  fetchData()
-  }else{
-    setProducts([])
-    setLoading(false)
-  }
+fetchData()
 },[user])
   
 const filteredproducts = products.filter(product =>
@@ -98,7 +100,7 @@ return (
   <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
   <Routes>
     <Route path='/' element={
-     user ?  (
+
       <div className="min-h-screen bg-white text-black">
     <div className="max-w-7xl mx-auto p-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -152,32 +154,7 @@ return (
       </div>
     </div>
   </div>
-) :(
- <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
-  <div className="text-center space-y-4 px-4">
-    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
-      Welcome to <span className="text-blue-500">ShopMate</span>
-    </h1>
-    <p className="text-lg sm:text-xl text-gray-300">
-      Please login or Signup to view our latest products and offers.
-    </p>
-   
-    <button
-      onClick={() => navigate('/login')}
-      className="mt-4 m-6 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition text-white font-semibold shadow-md"
-    >
-      Login
-    </button>
-    <button onClick={()=> navigate('/signup')}
-          className="mt-4 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition text-white font-semibold shadow-md"
-    >
-      Signup
-    </button>
 
-  </div>
-</div>
-
-)
     }/>
 
     <Route path='/cart' element={<Cart/>}/>

@@ -60,7 +60,7 @@ navigate('/');
     return(
        <div className="flex justify-center items-center h-screen bg-gray-100">
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-sm space-y-4">
-      <h2 className="text-xl font-bold text-center">Sign Up</h2>
+      <h2 className="text-4xl p-2 font-extrabold text-center bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent mb-6">Sign up</h2>
       <input
   type="text"
   placeholder="First Name"
